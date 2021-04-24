@@ -3,7 +3,7 @@ A personal deep learning study note
 
 
 ## List 
-----
+
 [1_AutoEncoder]( https://github.com/JimCurryWang/Deep-Learning-Jot/tree/main/AutoEncoder )
 
 [2_Convolutional Neural Network]( https://github.com/JimCurryWang/Deep-Learning-Jot/tree/main/CNN )
