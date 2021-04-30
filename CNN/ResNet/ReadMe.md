@@ -15,6 +15,7 @@ The Pytorch implementation for the ResNet paper: Deep Residual Learning for Imag
   <img src="img/ResNet50.png" width="100%"/>
 </div>
 
+
 ## Structure
 
 <div align="center">
