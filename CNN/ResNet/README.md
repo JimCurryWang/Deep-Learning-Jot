@@ -15,6 +15,7 @@ The Pytorch implementation for the ResNet paper: Deep Residual Learning for Imag
   <img src="img/ResNet50.png" width="100%"/>
 </div>
 
+
 ## Structure
 
 <div align="center">
@@ -58,8 +59,11 @@ The Pytorch implementation for the ResNet paper: Deep Residual Learning for Imag
             - H is the entire output in residual block 
             - so that, F(x) would be tiny enough, and H(x) == x is easlier to train.
 
+    - See more in [Identity Mappings in Deep Residual Networks](https://arxiv.org/pdf/1603.05027.pdf)
 
-- Average Pooling
+    
+
+- **Average Pooling**
     - Average Pooling replace the Giant FC layers
 
 
