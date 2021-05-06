@@ -10,20 +10,20 @@ The Pytorch implementation for the U-Net paper: Convolutional Networks for Biome
 
 
 <div align="center">
-  <img src="img/U-Net Schematic Diagram.png" width="100%"/>
+  <img src="img/unet.jpeg" width="100%"/>
 </div>
 
 
 ## Structure
 
-<div align="center">
+<!-- <div align="center">
   <img src="img/U-Net.jpeg" width="100%"/>
 </div>
 
 <div align="center">
   <img src="img/U-Net.jpeg" width="50%"/>
 </div>
-
+ -->
 
 ## Implement Keypoints
 
@@ -31,16 +31,16 @@ The Pytorch implementation for the U-Net paper: Convolutional Networks for Biome
 ## Repository Content
 
 ### pytorch script 
-- `U-Net.py` models structure
-- `test.py` function testing 
-- `train.py` train models
+- `model.py` models structure
+- `test.py` function testing (TBA)
+- `train.py` train models (TBA)
 
 
 ### jupyter notebooks
 
 Check the entire project in jupyter notebooks
 
-- terminal command ```jupyter notebook``` and open `U-Net.ipynb` run from top to down
+- terminal command ```jupyter notebook``` and open `U-Net.ipynb` run from top to down (TBA)
 
 
 ### Prequesites
