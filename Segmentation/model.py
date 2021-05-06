@@ -134,6 +134,7 @@ def unittest():
     '''
     x = torch.randn((1, 3, 572, 572))
     model = UNet(in_channels=3, out_channels=1)
+    # print(model.ups)
     preds = model(x)
     print(preds.shape)
     
