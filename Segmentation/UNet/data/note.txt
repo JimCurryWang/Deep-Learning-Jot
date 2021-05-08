@@ -1,0 +1,14 @@
+Download the data from kaggle competition 
+
+Carvana Image Masking Challenge
+Automatically identify the boundaries of the car in an image
+https://www.kaggle.com/c/carvana-image-masking-challenge
+
+specifically should have 4 folders: 
+
+- train_images
+- train_masks
+- val_images
+- val_masks
+
+
