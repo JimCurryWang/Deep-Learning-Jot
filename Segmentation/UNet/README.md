@@ -90,6 +90,22 @@ by a constant border width.  *- U-Net -*
 - The energy function is computed by a pixel-wise soft-max over the final feature map combined with the cross entropy loss function. (TBA)
 
 
+- [albumentations](https://github.com/albumentations-team/albumentations) : Fast image augmentation library and an easy-to-use wrapper around other libraries.   
+https://github.com/albumentations-team/albumentations
+
+
+- Segmentation is a multilabel question not a multiclassification question, however, each label can be taken as binary classification, and sum each loss from each label to compute the total loss.
+
+```python
+# --- Multiple case --- 
+n = 3
+model = UNet(in_channels=3, out_channels=N).to(DEVICE)
+loss_func = nn.CrossEntropyLoss()
+
+# --- Binary case --- 
+model = UNet(in_channels=3, out_channels=1).to(DEVICE)
+loss_func = nn.BCEWithLogitsLoss() # do sigmoid + BCE 
+```
 
 ## Repository Content
 
@@ -100,11 +116,11 @@ by a constant border width.  *- U-Net -*
 - `train.py` train models
 
 
-### jupyter notebooks
+### jupyter notebooks (TBA)
 
 Check the entire project in jupyter notebooks
 
-- terminal command ```jupyter notebook``` and open `U-Net.ipynb` run from top to down (TBA)
+- terminal command ```jupyter notebook``` and open `U-Net.ipynb` run from top to down
 
 
 ### Prequesites
