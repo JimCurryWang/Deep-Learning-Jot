@@ -128,8 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-
-
 Segmentation/UNet/data/train/*
 Segmentation/UNet/data/train_masks/*
 Segmentation/UNet/data/test/*
