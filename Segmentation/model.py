@@ -6,8 +6,9 @@ import torchvision.transforms.functional as TF
 class DoubleConv(nn.Module):
     def __init__(self, in_channels, out_channels):
         '''
-            ::Using same convolution
+            ::Using "same" convolution
             ::Add BatchNorm2d which is not used in original papers
+                (the BatchNorm2d concept is launched after Unet...)
         '''
         super(DoubleConv, self).__init__()
         self.conv = nn.Sequential(
@@ -100,6 +101,7 @@ class UNet(nn.Module):
         # for i in range(0,8,2): -> [0,1,2,3,4,5,6,7] -> 0,2,4,6
         for idx in range(0, len(self.ups), 2):
 
+            # --- ConvTranspose2d ---
             # fetch ConvTranspose2d layers
             x = self.ups[idx](x)
             # do floot division to get the corresponding skip_connection 
@@ -113,10 +115,18 @@ class UNet(nn.Module):
                 # torch.Size([3, 512, 20, 20]) -> torch.Size([20, 20])
                 x = TF.resize(x, size=skip_connection.shape[2:])
 
+
+            # --- Concatenate --- 
             # channel-wise dimension feature concat
             # dim=1 -> along the channel dimension, not on dim=0 which will increase dimension
             concat_skip = torch.cat((skip_connection, x), dim=1)
+            # print(skip_connection.shape)
+            # print(x.shape)
+            # print(concat_skip.shape)
 
+
+
+            # --- DoubleConv --- 
             # throw the concat layer into DoubleConv
             x = self.ups[idx+1](concat_skip)
 
@@ -136,7 +146,7 @@ def unittest():
     model = UNet(in_channels=3, out_channels=1)
     # print(model.ups)
     preds = model(x)
-    print(preds.shape)
+    # print(preds.shape)
     
     assert preds.shape[2:] == x.shape[2:] , (preds.shape, x.shape) 
 
