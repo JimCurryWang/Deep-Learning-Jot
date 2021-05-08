@@ -71,13 +71,13 @@ component feature vector to the desired number of classes.
 
 #### Others
 
-- In this implementation, the input pixels size and the output pixels size should be the same.( However, the original paper not )
+- In this implementation, the input pixels size and the output pixels size should be the same.( However, the original paper is not )
     - i.g. (1, 3, 572, 572) -> (1, 1, 572, 572)
         - batch_size = 3 
         - channel_size = 1 
         - kernel_size = 572x572
 
-- Add BatchNorm2d which is not used in original papers (However, the BatchNorm2d concept is launched after Unet...)
+- Add BatchNorm2d which is not used in original papers (However, the BatchNorm2d concept was introduced after Unet...)
 
 - Due to the unpadded convolutions, the output image is smaller than the input
 by a constant border width.  *- U-Net -*
@@ -95,8 +95,9 @@ by a constant border width.  *- U-Net -*
 
 ### pytorch script 
 - `model.py` models structure
-- `test.py` function testing (TBA)
-- `train.py` train models (TBA)
+- `dataset.py` function for loading data
+- `utils.py` function for some tools like saving img, save and load checkpoints
+- `train.py` train models
 
 
 ### jupyter notebooks

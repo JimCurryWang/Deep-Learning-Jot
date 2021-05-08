@@ -17,7 +17,7 @@ from utils import (
 LEARNING_RATE = 1e-4
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 16
-NUM_EPOCHS = 3
+NUM_EPOCHS = 3 # 100
 NUM_WORKERS = 2
 IMAGE_HEIGHT = 160  # 1280 originally
 IMAGE_WIDTH = 240  # 1918 originally
@@ -51,6 +51,21 @@ def train_fn(loader, model, optimizer, loss_fn, scaler):
 
 
 def main():
+    '''
+    torch.nn.CrossEntropyLoss()
+
+    torch.nn.BCELoss()
+        Creates a criterion that measures the Binary Cross Entropy 
+        between the target and the output
+    
+    torch.nn.BCEWithLogitsLoss()
+        Sigmoid + BCELoss
+
+        This loss combines a Sigmoid layer and the BCELoss in one single class. 
+        This version is more numerically stable than using a plain Sigmoid 
+        followed by a BCELoss as, by combining the operations into one layer, 
+        we take advantage of the log-sum-exp trick for numerical stability.
+    '''
     train_transform = A.Compose(
         [
             A.Resize(height=IMAGE_HEIGHT, width=IMAGE_WIDTH),
@@ -78,8 +93,16 @@ def main():
         ],
     )
 
+    # --- Multiple case --- 
+    # n = 3
+    # model = UNET(in_channels=3, out_channels=N).to(DEVICE)
+    # loss_fn = nn.CrossEntropyLoss()
+
+    # --- Binary case --- 
     model = UNET(in_channels=3, out_channels=1).to(DEVICE)
     loss_fn = nn.BCEWithLogitsLoss()
+
+
     optimizer = optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     train_loader, val_loader = get_loaders(
@@ -118,7 +141,6 @@ def main():
         save_predictions_as_imgs(
             val_loader, model, folder="saved_images/", device=DEVICE
         )
-
 
 if __name__ == "__main__":
     main()
