@@ -138,8 +138,8 @@ class UNet(nn.Module):
 
 def unittest():
     '''
-        batch_size = 3 
-        channel_size = 1 
+        batch_size = 1 
+        channel_size = 3 
         kernel_size = 572x572
     '''
     x = torch.randn((1, 3, 572, 572))
