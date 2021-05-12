@@ -10,7 +10,7 @@ The Pytorch implementation for the U-Net paper: Convolutional Networks for Biome
 
 
 <div align="center">
-  <img src="img/unet.jpeg" width="100%"/>
+  <img src="img/unet_v2.jpeg" width="100%"/>
 </div>
 
 
