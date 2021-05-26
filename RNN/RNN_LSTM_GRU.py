@@ -58,7 +58,7 @@ class RNN(nn.Module):
         self.num_layers = num_layers
         
         self.rnn = nn.RNN(input_size, hidden_size, num_layers, batch_first=True)
-        self.fc = nn.Linear(hidden_size * sequence_length, num_classes)
+        self.fc = nn.Linear(hidden_size, num_classes)
 
     def forward(self, x):
         '''
@@ -70,9 +70,10 @@ class RNN(nn.Module):
         out = out.reshape(out.shape[0], -1)
         '''
         out, _ = self.rnn(x)
-        out = out.reshape(out.shape[0], -1)
 
         # Decode the hidden state of the last time step
+        # only take the last hidden state and send it into fc
+        out = out[:, -1, :] # out = [64, 256]
         out = self.fc(out)
         return out
 
@@ -86,7 +87,7 @@ class GRU(nn.Module):
         self.num_layers = num_layers
         
         self.gru = nn.GRU(input_size, hidden_size, num_layers, batch_first=True)
-        self.fc = nn.Linear(hidden_size * sequence_length, num_classes)
+        self.fc = nn.Linear(hidden_size, num_classes)
 
     def forward(self, x):
         '''
@@ -98,14 +99,14 @@ class GRU(nn.Module):
         out = out.reshape(out.shape[0], -1)
         '''
         out, _ = self.gru(x)
-        out = out.reshape(out.shape[0], -1)
 
         # Decode the hidden state of the last time step
+        # only take the last hidden state and send it into fc
+        out = out[:, -1, :]
         out = self.fc(out)
         return out
 
-
-class LSTM(nn.Module):
+class LSTM_Multi2Multi(nn.Module):
     '''Recurrent neural network with LSTM (many-to-one)
     '''
     def __init__(self, input_size, hidden_size, num_layers, num_classes):
@@ -131,12 +132,90 @@ class LSTM(nn.Module):
         # out: tensor of shape (batch_size, seq_length, hidden_size)
         out = out.reshape(out.shape[0], -1)
         '''
-        out, _ = self.lstm(x) # x=[64, 28, 28], out=[64, 28, 256]
-        out = out.reshape(out.shape[0], -1) # out=[64, 28*256]
-
-        # Decode the hidden state of the last time step
+        out, _ = self.lstm(x) # x=[64, 28, 28], out=[64, 28, 256]=(batch, seq_len, 1 * hidden_size)
+    
+        # If use this, it means that we would take all output from seq1 ~ seq28
+        out = out.reshape(out.shape[0], -1) # out=[64, 28*256]    
+    
+        # Decode the hidden state of all the time step
+        # only take the last hidden state and send it into fc
         out = self.fc(out)
         return out
+
+class LSTM(nn.Module):
+    '''Recurrent neural network with LSTM (many-to-one)
+    '''
+    def __init__(self, input_size, hidden_size, num_layers, num_classes):
+        super(LSTM, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
+
+        # Using the last rnn output with fc to obtain the final classificaiton result
+        self.fc = nn.Linear(hidden_size, num_classes)
+
+    def forward(self, x):
+        '''
+        # Set initial hidden and cell states, 
+        # h0, c0 -> (num_layers * num_direction, batch, hidden_size)
+        
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+
+        # Forward propagate LSTM
+        out, (h, c) = self.lstm( x, (h0, c0)) 
+        # out: tensor of shape (batch_size, seq_length, hidden_size)
+        out = out.reshape(out.shape[0], -1)
+        '''
+        out, _ = self.lstm(x) # x=[64, 28, 28], out=[64, 28, 256]=(batch, seq_len, 1 * hidden_size)
+    
+        # Decode the hidden state of the last time step
+        # only take the last hidden state and send it into fc
+        out = out[:, -1, :] # out = [64, 256]
+        out = self.fc(out)
+        return out
+
+
+class BLSTM(nn.Module):
+    '''Bidirectional LSTM
+    '''
+    def __init__(self, input_size, hidden_size, num_layers, num_classes):
+        super(BLSTM, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        
+        self.lstm = nn.LSTM(
+            input_size, hidden_size, num_layers, 
+            batch_first=True, bidirectional=True
+        )
+        self.fc = nn.Linear(hidden_size * 2, num_classes)
+
+    def forward(self, x):
+        '''
+        # Set initial hidden and cell states, 
+        # h0, c0 -> (num_layers * num_direction, batch, hidden_size)
+        
+        h0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size).to(device)
+        c0 = torch.zeros(self.num_layers * 2, x.size(0), self.hidden_size).to(device)
+
+        # Forward propagate BLSTM
+        out, (h, c) = self.lstm( x, (h0, c0)) 
+        # out: tensor of shape (batch_size, seq_length, hidden_size)
+        out = out.reshape(out.shape[0], -1)
+        '''
+
+        # BI-LSTM will have a forward and a backward, 
+        # but they are all going to get concatenated into the same hidden state
+        out, _ = self.lstm(x) # x=[64, 28, 28], out=[64, 28, 2*256]=(batch, seq_len, num_directions * hidden_size)
+        
+        # Decode the hidden state of the last time step
+        # only take the last hidden state and send it into fc
+        out = out[:, -1, :]
+        out = self.fc(out)
+
+        return out
+
 
 
 def check_accuracy(loader, model):
@@ -168,11 +247,13 @@ train_dataset = datasets.MNIST(root="mnist/MNIST", train=True,
     transform=transforms.ToTensor(), download=True)
 test_dataset = datasets.MNIST(root="mnist/MNIST", train=False, 
     transform=transforms.ToTensor(), download=True)
+
 train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
 # Initialize network (try out just using simple RNN, or GRU, and then compare with LSTM)
 model = LSTM(input_size, hidden_size, num_layers, num_classes).to(device)
+# model = BLSTM(input_size, hidden_size, num_layers, num_classes).to(device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
