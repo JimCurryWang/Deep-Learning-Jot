@@ -25,9 +25,9 @@ https://pytorch.org/docs/stable/generated/torch.nn.RNN.html
     batch_first – If True, then the input and output tensors are provided as (batch, seq_len, feature). 
                 Default: False
 
-                input of shape (seq_len, batch, input_size):
+                ** input of shape (seq_len, batch, input_size):
                     -> (batch, seq_len, input_size)
-                output of shape (seq_len, batch, num_directions * hidden_size)
+                ** output of shape (seq_len, batch, num_directions * hidden_size)
                     -> (batch, seq_len, num_directions * hidden_size)
 
     bidirectional – If True, becomes a bidirectional RNN. 
@@ -131,8 +131,8 @@ class LSTM(nn.Module):
         # out: tensor of shape (batch_size, seq_length, hidden_size)
         out = out.reshape(out.shape[0], -1)
         '''
-        out, _ = self.lstm(x)
-        out = out.reshape(out.shape[0], -1) 
+        out, _ = self.lstm(x) # x=[64, 28, 28], out=[64, 28, 256]
+        out = out.reshape(out.shape[0], -1) # out=[64, 28*256]
 
         # Decode the hidden state of the last time step
         out = self.fc(out)
@@ -164,8 +164,10 @@ def check_accuracy(loader, model):
 
 
 # Load Data
-train_dataset = datasets.MNIST(root="mnist/MNIST", train=True, transform=transforms.ToTensor(), download=True)
-test_dataset = datasets.MNIST(root="mnist/MNIST", train=False, transform=transforms.ToTensor(), download=True)
+train_dataset = datasets.MNIST(root="mnist/MNIST", train=True, 
+    transform=transforms.ToTensor(), download=True)
+test_dataset = datasets.MNIST(root="mnist/MNIST", train=False, 
+    transform=transforms.ToTensor(), download=True)
 train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
 test_loader = DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
