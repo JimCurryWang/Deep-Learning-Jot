@@ -67,7 +67,7 @@ class RNN(nn.Module):
 
         # Forward propagate LSTM
         out, h0 = self.rnn(x, h0)
-        out = out.reshape(out.shape[0], -1)
+        out = out[:, -1, :]
         '''
         out, _ = self.rnn(x)
 
@@ -96,7 +96,7 @@ class GRU(nn.Module):
 
         # Forward propagate LSTM
         out, h0 = self.gru(x, h0)
-        out = out.reshape(out.shape[0], -1)
+        out = out[:, -1, :]
         '''
         out, _ = self.gru(x)
 
@@ -166,7 +166,7 @@ class LSTM(nn.Module):
         # Forward propagate LSTM
         out, (h, c) = self.lstm( x, (h0, c0)) 
         # out: tensor of shape (batch_size, seq_length, hidden_size)
-        out = out.reshape(out.shape[0], -1)
+        out = out[:, -1, :]
         '''
         out, _ = self.lstm(x) # x=[64, 28, 28], out=[64, 28, 256]=(batch, seq_len, 1 * hidden_size)
     
