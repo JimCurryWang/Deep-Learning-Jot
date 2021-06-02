@@ -6,6 +6,8 @@ import torch.utils.data as data_utils
 
 
 class Net(nn.Module):
+    '''Simple demo for multi structure
+    '''
     def __init__(self, n_input, n_hidden, n_output):
 
         super(Net, self).__init__()
@@ -120,9 +122,11 @@ def SimpleDataLoader():
 if __name__ == '__main__':
     data = SimpleDataLoader()
     
-    # net = Net(n_input=1, n_hidden=20, n_output=1)
-    # train(net, data)
+    # Net
+    net = Net(n_input=1, n_hidden=20, n_output=1)
+    train(net, data)
 
+    # Sequential version Net
     doublenet = DoubleNet(n_input=1, n_hidden=20, n_output=1)
     train(doublenet, data)
 
