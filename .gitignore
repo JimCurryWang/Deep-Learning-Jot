@@ -137,3 +137,5 @@ Segmentation/UNet/data/test_masks/*
 RNN/mnist/MNIST/MNIST/*
 RNN/Basic_Notebook/*.ipynb
 
+Transformer/.data/*
+
