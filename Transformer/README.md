@@ -27,6 +27,9 @@ spacy=3.0.6
 
 * 2 - [ Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation](https://github.com/JimCurryWang/Deep-Learning-Jot/blob/seq2seq-1/Transformer/1_Sequence_to_Sequence_Learning_with_Neural_Networks.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1_lVgtZzxDunviwjbC44QLkqYpo23BwBg?usp=sharing)
 
+![](assets/seq2seq7.png)
+
+
 
 
 
