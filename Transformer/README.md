@@ -22,6 +22,13 @@ spacy=3.0.6
     - The model itself will be based off an implementation of [Sequence to Sequence Learning with Neural Networks](https://arxiv.org/abs/1409.3215), which uses multi-layer LSTMs.
     - \*Multi30k is a dataset with ~30,000 parallel English, German and French sentences, each with ~12 words per sentence. 
 
+![](assets/seq2seq4.png)
+
+
+* 2 - [ Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation](https://github.com/JimCurryWang/Deep-Learning-Jot/blob/seq2seq-1/Transformer/1_Sequence_to_Sequence_Learning_with_Neural_Networks.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1_lVgtZzxDunviwjbC44QLkqYpo23BwBg?usp=sharing)
+
+
+
 
 # Reference 
 
