@@ -30,7 +30,8 @@ spacy=3.0.6
 ![](assets/seq2seq7.png)
 
 
-
+* Attention is All You Need
+    - In this notebook we will be implementing a (slightly modified version) of the Transformer model from the Attention is All You Need paper.
 
 
 # Reference 
